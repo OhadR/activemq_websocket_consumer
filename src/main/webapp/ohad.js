@@ -1,21 +1,20 @@
-//var intervalObj = setInterval(callBackendGetJobProgress, (1 * 1000));
 var intervalObj;
+var ws;
 
 var counter = 0;
-//var destination = 'queue://JCG_QUEUE';
 var destination;
 var handlerId = '54';
 
 function connect() {
-    var username = document.getElementById("username").value;
+    var username = 'ohadsss';
     
     var host = document.location.host;
     var pathname = document.location.pathname;
     
-    ws = new WebSocket("ws://" +host  + pathname + "chat/" + username);
+    ws = new WebSocket("ws://" +host  + pathname + "amq/" + username);
 
     ws.onmessage = function(event) {
-    var log = document.getElementById("log");
+    	var log = document.getElementById("log");
         console.log(event.data);
         var message = JSON.parse(event.data);
         log.innerHTML += message.from + " : " + message.content + "\n";
@@ -26,7 +25,7 @@ function onReceiveMessage(message)
 {
 	console.log('received message from ' + destination + '. ' + message.textContent);
 //	alert("received "+ message.textContent);
-	$("#messages").text( message.textContent );
+	$("#log").text( message.textContent );
 }
 
 $(document).ready(function() {

@@ -14,35 +14,44 @@ import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
-import com.baeldung.model.Message;
+import org.apache.log4j.Logger;
 
-@ServerEndpoint(value = "/amq/{username}", decoders = MessageDecoder.class, encoders = MessageEncoder.class)
+import com.ohadr.activemq.websocket.model.Message;
+
+
+@ServerEndpoint(value = "/amq/{action}", decoders = MessageDecoder.class, encoders = MessageEncoder.class)
 public class ChatEndpoint {
+	private static Logger log = Logger.getLogger(ChatEndpoint.class);
+
     private Session session;
     private static final Set<ChatEndpoint> chatEndpoints = new CopyOnWriteArraySet<>();
     private static HashMap<String, String> users = new HashMap<>();
 
     @OnOpen
-    public void onOpen(Session session, @PathParam("username") String username) throws IOException, EncodeException {
+    public void onOpen(Session session, @PathParam("action") String action) throws IOException, EncodeException {
 
+		log.info("onOpen");
         this.session = session;
         chatEndpoints.add(this);
-        users.put(session.getId(), username);
+        users.put(session.getId(), action);
 
         Message message = new Message();
-        message.setFrom(username);
+        message.setFrom(action);
         message.setContent("Connected!");
         broadcast(message);
     }
 
     @OnMessage
     public void onMessage(Session session, Message message) throws IOException, EncodeException {
+		log.info("onMessage");
+
         message.setFrom(users.get(session.getId()));
         broadcast(message);
     }
 
     @OnClose
     public void onClose(Session session) throws IOException, EncodeException {
+		log.info("onClose");
         chatEndpoints.remove(this);
         Message message = new Message();
         message.setFrom(users.get(session.getId()));

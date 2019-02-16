@@ -10,14 +10,4 @@
         <param-value>tcp://localhost:61616</param-value>
     </context-param>
 	
-	<servlet>
-		<servlet-name>AjaxServlet</servlet-name>
-		<servlet-class>org.apache.activemq.web.AjaxServlet</servlet-class>
-	</servlet>
-	
-	<servlet-mapping>
-		<servlet-name>AjaxServlet</servlet-name>
-		<url-pattern>/amq/*</url-pattern>
-	</servlet-mapping>
-
 </web-app>
