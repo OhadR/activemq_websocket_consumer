@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+import javax.jms.JMSException;
 import javax.websocket.EncodeException;
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
@@ -16,10 +17,12 @@ import javax.websocket.server.ServerEndpoint;
 
 import org.apache.log4j.Logger;
 
-import com.ohadr.activemq.websocket.model.Message;
+import com.ohadr.activemq.receiver.non_blocking.JmsMessageListenerExample;
 
 
-@ServerEndpoint(value = "/amq/{action}", decoders = MessageDecoder.class, encoders = MessageEncoder.class)
+@ServerEndpoint(value = "/amq/{action}", 
+				decoders = MessageDecoder.class, 
+				encoders = MessageEncoder.class)
 public class ChatEndpoint {
 	private static Logger log = Logger.getLogger(ChatEndpoint.class);
 
@@ -28,24 +31,30 @@ public class ChatEndpoint {
     private static HashMap<String, String> users = new HashMap<>();
 
     @OnOpen
-    public void onOpen(Session session, @PathParam("action") String action) throws IOException, EncodeException {
+    public void onOpen(Session session, @PathParam("action") String queueName) 
+    		throws IOException, EncodeException, JMSException, InterruptedException {
 
 		log.info("onOpen");
         this.session = session;
         chatEndpoints.add(this);
-        users.put(session.getId(), action);
+        users.put(session.getId(), queueName);
 
-        Message message = new Message();
-        message.setFrom(action);
-        message.setContent("Connected!");
-        broadcast(message);
+        JmsMessageListenerExample.registerListener(this);
+        broadcast("Listening to " + queueName);
     }
 
     @OnMessage
-    public void onMessage(Session session, Message message) throws IOException, EncodeException {
+    public void onMessage(Session session, String message) throws IOException, EncodeException {
 		log.info("onMessage");
 
-        message.setFrom(users.get(session.getId()));
+		String fullMessage = users.get(session.getId()) + ": " + message;
+        broadcast(fullMessage);
+    }
+
+    //TODO: learn if i can call directly to onMessage with session.
+    public void onMessage(String message)
+    {
+		log.info("onMessage: " + message);
         broadcast(message);
     }
 
@@ -53,9 +62,8 @@ public class ChatEndpoint {
     public void onClose(Session session) throws IOException, EncodeException {
 		log.info("onClose");
         chatEndpoints.remove(this);
-        Message message = new Message();
-        message.setFrom(users.get(session.getId()));
-        message.setContent("Disconnected!");
+        String from = users.get(session.getId());
+        String message = "Disconnected from " + from;
         broadcast(message);
     }
 
@@ -64,13 +72,14 @@ public class ChatEndpoint {
         // Do error handling here
     }
 
-    private static void broadcast(Message message) throws IOException, EncodeException {
+    private static void broadcast(String message) {
         chatEndpoints.forEach(endpoint -> {
             synchronized (endpoint) {
                 try {
                     endpoint.session.getBasicRemote()
                         .sendObject(message);
                 } catch (IOException | EncodeException e) {
+                	log.error("error broadcasting.", e);
                     e.printStackTrace();
                 }
             }

@@ -4,14 +4,13 @@ import javax.websocket.DecodeException;
 import javax.websocket.Decoder;
 import javax.websocket.EndpointConfig;
 
-import com.ohadr.activemq.websocket.model.Message;
 import com.ohadr.common.utils.JsonUtils;
 
-public class MessageDecoder implements Decoder.Text<Message> {
+public class MessageDecoder implements Decoder.Text<String> {
 
     @Override
-    public Message decode(String s) throws DecodeException {
-        Message message = JsonUtils.convertFromJson(s, Message.class);
+    public String decode(String s) throws DecodeException {
+    	String message = JsonUtils.convertFromJson(s, String.class);
         return message;
     }
 

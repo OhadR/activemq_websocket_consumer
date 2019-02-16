@@ -3,29 +3,20 @@ var ws;
 
 var counter = 0;
 var destination;
-var handlerId = '54';
 
-function connect() {
-    var username = 'ohadsss';
-    
+function connect() 
+{
     var host = document.location.host;
     var pathname = document.location.pathname;
     
-    ws = new WebSocket("ws://" +host  + pathname + "amq/" + username);
+    ws = new WebSocket("ws://" +host  + pathname + "amq/" + destination);
 
     ws.onmessage = function(event) {
     	var log = document.getElementById("log");
-        console.log(event.data);
+    	console.log('received message from ' + destination + '. ' + event.data);
         var message = JSON.parse(event.data);
-        log.innerHTML += message.from + " : " + message.content + "\n";
+        log.innerHTML += message + "\n";
     };
-}
-
-function onReceiveMessage(message)
-{
-	console.log('received message from ' + destination + '. ' + message.textContent);
-//	alert("received "+ message.textContent);
-	$("#log").text( message.textContent );
 }
 
 $(document).ready(function() {
@@ -34,11 +25,11 @@ $(document).ready(function() {
 
 	$("#submit").click(function(){
 		
-		intervalObj = setInterval(callBackend, (5 * 1000));
+		intervalObj = setInterval(sendMessage, (5 * 1000));
 	});
 });
 
-function callBackend()
+function sendMessage()
 {
 	console.log('sending message to ' + destination);
 	++counter;
@@ -62,33 +53,6 @@ function getServerAddress()
 	return serverAddress;
 }
 
-function callBackendGetJobProgress()
-{
-	var requestData = {
-		numSamples: 30
-	};
-	
-	var serverAddress = getServerAddress();
-	
-	$.ajax({
-		url: serverAddress + "/rest-api/status/getProgress",
-		data: requestData,
-		type: 'GET',
-		dataType: 'text',
-		contentType: 'application/json',
-		success: function(response, textStatus, jqXHR){
-			var marsStats = JSON.parse(response);
-//			drawChart( marsStats );
-			counter = 0;
-		},
-		error: function(jqXHR, textStatus, errorThrown){
-			++counter;
-			if(counter % 15 == 0)
-				alert('error attempting to reach ' + serverAddress + ', counter=' + counter);
-		}
-	});
-}
-
 
 function stopInterval()
 {
@@ -98,11 +62,11 @@ function stopInterval()
 
 function registerListener()
 {
-	amq.addListener(handlerId, destination, onReceiveMessage);
+	connect();
 }
 
 function unregisterListener()
 {
-	amq.removeListener(handlerId, destination);
+	disconnect();
 }
 
