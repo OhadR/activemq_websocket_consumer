@@ -6,6 +6,22 @@ var counter = 0;
 var destination;
 var handlerId = '54';
 
+function connect() {
+    var username = document.getElementById("username").value;
+    
+    var host = document.location.host;
+    var pathname = document.location.pathname;
+    
+    ws = new WebSocket("ws://" +host  + pathname + "chat/" + username);
+
+    ws.onmessage = function(event) {
+    var log = document.getElementById("log");
+        console.log(event.data);
+        var message = JSON.parse(event.data);
+        log.innerHTML += message.from + " : " + message.content + "\n";
+    };
+}
+
 function onReceiveMessage(message)
 {
 	console.log('received message from ' + destination + '. ' + message.textContent);
@@ -91,10 +107,3 @@ function unregisterListener()
 	amq.removeListener(handlerId, destination);
 }
 
-function amqConnectionStatusHandler(status)
-{
-	if(!status)
-		console.error('* connection status: ' + status);
-	else
-		console.log('* connection status: ' + status);
-}
