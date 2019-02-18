@@ -1,7 +1,8 @@
 <html>
 <head>
     <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-	<script src="./ohad.js"></script>
+    <script src="js/stomp.js"></script>
+	<script src="js/direct-amq-websocket.js"></script>
 </head>
 
 <body>
@@ -11,8 +12,10 @@
 	<h1>JS-websocket client for ActiveMQ</h1>
 
 	Queue: <input type="text" id="queue_name" value='JCG_QUEUE' readonly='true' ><br><br>
-	<input id="submit" type="submit" value="Start Sending" disabled />
+	Periodic: <input id="submit" type="submit" value="Start Sending" disabled />
 	<button disabled onclick="stopInterval()">Stop Sending</button><br><br>
+
+	Single: <button onclick="sendMessage()">Send Message</button><br><br>
 	
 	<button onclick="registerListener()">Register Listener</button>
 	<button onclick="unregisterListener()">Unregister Listener</button><br><br>
