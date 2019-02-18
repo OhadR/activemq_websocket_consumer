@@ -20,13 +20,10 @@ import com.ohadr.activemq.websocket.ChatEndpoint;
  */
 public class JmsMessageListenerExample {
 
-	// Name of the queue we will send/receive messages from
-    public static String subject = "OHADS_QUEUE";
-
     //URL of the JMS server. DEFAULT_BROKER_URL will just mean that JMS server is on localhost
     public static String url = ActiveMQConnection.DEFAULT_BROKER_URL;
 
-    public static void registerListener(ChatEndpoint endpoint) throws JMSException, InterruptedException {
+    public static void registerListener(ChatEndpoint endpoint, String queueName) throws JMSException, InterruptedException {
         Connection connection = null;
         try {
             // Producer
@@ -35,7 +32,7 @@ public class JmsMessageListenerExample {
             connection = connectionFactory.createConnection();
             Session session = connection.createSession(false,
                     Session.AUTO_ACKNOWLEDGE);
-            Queue queue = session.createQueue(subject);
+            Queue queue = session.createQueue(queueName);
 
             //sending a message:
 //            String payload = "Important Task";

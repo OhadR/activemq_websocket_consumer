@@ -39,7 +39,7 @@ public class ChatEndpoint {
         chatEndpoints.add(this);
         users.put(session.getId(), queueName);
 
-        JmsMessageListenerExample.registerListener(this);
+        JmsMessageListenerExample.registerListener(this, queueName);
         broadcast("Listening to " + queueName);
     }
 
