@@ -6,17 +6,16 @@
 
 <body>
 	<img src="./images/Javascript.png" alt="js_logo" height="80">
+	<img src="./images/html5websockets.png" alt="ws_logo" height="80">
 	<img src="./images/Apache-activemq-logo.png" alt="activemq_logo" height="80"><br>
 	<h1>JS-websocket client for ActiveMQ</h1>
 
-    <!--Div that will hold the pie chart-->
-	Broker: <input type="text" id="server_name">:<input type="text" id="server_port" value=''><br><br>
-	Queue: <input type="text" id="queue_name" value='OHADS_QUEUE' readonly='true' ><br><br>
-	<input id="submit" type="submit" value="Start Sending" />
-	<button onclick="stopInterval()">Stop Sending</button><br><br>
+	Queue: <input type="text" id="queue_name" value='JCG_QUEUE' readonly='true' ><br><br>
+	<input id="submit" type="submit" value="Start Sending" disabled />
+	<button disabled onclick="stopInterval()">Stop Sending</button><br><br>
 	
 	<button onclick="registerListener()">Register Listener</button>
-	<button onclick="unregisterListener()">Unregister Listener</button>
+	<button onclick="unregisterListener()">Unregister Listener</button><br><br>
 
 	<textarea id="log" readonly="true" rows="10" cols="80"></textarea>
     
