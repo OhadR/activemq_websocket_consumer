@@ -6,26 +6,14 @@ var log;
 function connect() 
 {
 	client = Stomp.client( "ws://localhost:61614/stomp", "v11.stomp" );
-	client.connect( "", "",
-	 function() {
-	     client.subscribe(destination,
-	      function( message ) 
-	      {
-//	    	 	alert( event );
-				console.log('received message from ' + destination + '. ' + message.body);
-				log.innerHTML += message.body + "\n";
-			}, 
-	   { priority: 9 } 
-	     );
-	 }
-	);
+	client.connect( "", "", connectionCallback );
 }
 
 $(document).ready(function() {
 
 	$('#queue_name').val('ohadr-test-websocket');
 	destination = $('#queue_name').val();
-	log = document.getElementById("log");
+	log = $('#log');
 
 	$("#submit").click(function(){
 		
@@ -54,5 +42,20 @@ function disconnect()
 function disconnectCallback()
 {
 	console.log('disconnected.');
-	log.innerHTML += 'disconnected.\n';
+	log.append( 'disconnected.\n' );
+}
+
+function connectionCallback() 
+{
+	console.log('connected to ActiveMQ STOMP.');
+	log.append( 'connected to ActiveMQ STOMP.\n' );
+    client.subscribe(destination,
+     function( message ) 
+     {
+//   	 	alert( event );
+			console.log('received message from ' + destination + '. ' + message.body);
+			log.append( message.body + "\n" );
+		}, 
+  { priority: 9 } 
+    );
 }
