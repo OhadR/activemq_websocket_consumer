@@ -1,6 +1,3 @@
-var intervalObj;
-var ws;
-
 var counter = 0;
 var destination;
 var client;
