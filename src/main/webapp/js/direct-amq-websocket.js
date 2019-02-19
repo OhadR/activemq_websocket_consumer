@@ -47,15 +47,15 @@ function disconnectCallback()
 
 function connectionCallback() 
 {
-	console.log('connected to ActiveMQ STOMP.');
-	log.append( 'connected to ActiveMQ STOMP.\n' );
+    console.log('connected to ActiveMQ STOMP.');
+    log.append( 'connected to ActiveMQ STOMP.\n' );
     client.subscribe(destination,
      function( message ) 
      {
 //   	 	alert( event );
-			console.log('received message from ' + destination + '. ' + message.body);
-			log.append( message.body + "\n" );
-		}, 
-  { priority: 9 } 
+            console.log('received message from ' + destination + '. ' + message.body);
+            log.append( message.body + "\n" );
+     },
+     { priority: 9 } 
     );
 }
