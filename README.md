@@ -28,6 +28,7 @@ There is a button for sending a single message, for tests, to save time (you do 
 
 https://www.baeldung.com/java-websockets
 
+[DZone: Easy Messaging with STOMP over WebSockets using ActiveMQ and HornetQ](https://dzone.com/articles/easy-messaging-stomp-over)
 
 ## Application Screenshot
 
