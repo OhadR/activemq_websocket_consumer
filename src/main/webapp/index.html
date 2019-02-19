@@ -11,11 +11,8 @@
 	<img src="./images/Apache-activemq-logo.png" alt="activemq_logo" height="80"><br>
 	<h1>JS-websocket client for ActiveMQ</h1>
 
-	Queue: <input type="text" id="queue_name" value='JCG_QUEUE' readonly='true' ><br><br>
-	Periodic: <input id="submit" type="submit" value="Start Sending" disabled />
-	<button disabled onclick="stopInterval()">Stop Sending</button><br><br>
-
-	Single: <button onclick="sendMessage()">Send Message</button><br><br>
+	Queue: <input type="text" id="queue_name" value='' readonly='true' ><br><br>
+	<button onclick="sendMessage()">Send Message</button><br><br>
 	
 	<button onclick="registerListener()">Register Listener</button>
 	<button onclick="unregisterListener()">Unregister Listener</button><br><br>

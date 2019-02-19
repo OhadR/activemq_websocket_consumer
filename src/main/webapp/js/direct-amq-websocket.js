@@ -39,6 +39,7 @@ function connect()
 
 $(document).ready(function() {
 
+	$('#queue_name').val('ohadr-test-websocket');
 	destination = $('#queue_name').val();
 
 	$("#submit").click(function(){
