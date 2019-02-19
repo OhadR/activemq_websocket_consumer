@@ -10,7 +10,7 @@ function connect()
 	client = Stomp.client( "ws://localhost:61614/stomp", "v11.stomp" );
 	client.connect( "", "",
 	 function() {
-	     client.subscribe("jms.topic.test",
+	     client.subscribe(destination,
 	      function( message ) 
 	      {
 //	    	 	alert( event );
@@ -51,7 +51,7 @@ function sendMessage()
 {
 	console.log('sending message to ' + destination);
 	++counter;
-	client.send("jms.topic.test", { priority: 9 }, "Pub/Sub over STOMP! " + counter);
+	client.send(destination, { priority: 9 }, "Pub/Sub over STOMP! " + counter);
 }
 
 function getServerAddress()
