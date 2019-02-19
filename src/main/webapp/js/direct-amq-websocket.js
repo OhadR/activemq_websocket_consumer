@@ -7,7 +7,7 @@ function connect()
 	client = Stomp.client( "ws://localhost:61614/stomp", "v11.stomp" );
 	client.connect( "", "",
 	 function() {
-	     client.subscribe("jms.topic.test",
+	     client.subscribe(destination,
 	      function( message ) 
 	      {
 //	    	 	alert( event );
@@ -36,6 +36,7 @@ function connect()
 
 $(document).ready(function() {
 
+	$('#queue_name').val('ohadr-test-websocket');
 	destination = $('#queue_name').val();
 
 	$("#submit").click(function(){
@@ -48,7 +49,7 @@ function sendMessage()
 {
 	console.log('sending message to ' + destination);
 	++counter;
-	client.send("jms.topic.test", { priority: 9 }, "Pub/Sub over STOMP! " + counter);
+	client.send(destination, { priority: 9 }, "Pub/Sub over STOMP! " + counter);
 }
 
 function getServerAddress()
