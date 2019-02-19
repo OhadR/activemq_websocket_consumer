@@ -10,8 +10,6 @@ import javax.jms.Session;
 import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
 
-import com.ohadr.activemq.websocket.ChatEndpoint;
-
 /**
  * based on: https://examples.javacodegeeks.com/enterprise-java/jms/jms-messagelistener-example/
  * 
@@ -23,7 +21,7 @@ public class JmsMessageListenerExample {
     //URL of the JMS server. DEFAULT_BROKER_URL will just mean that JMS server is on localhost
     public static String url = ActiveMQConnection.DEFAULT_BROKER_URL;
 
-    public static void registerListener(ChatEndpoint endpoint, String queueName) throws JMSException, InterruptedException {
+    public static void registerListener(String queueName) throws JMSException, InterruptedException {
         Connection connection = null;
         try {
             // Producer
@@ -43,7 +41,7 @@ public class JmsMessageListenerExample {
  
             // Consumer
             MessageConsumer consumer = session.createConsumer(queue);
-            consumer.setMessageListener(new ConsumerMessageListener("Consumer", endpoint));
+            consumer.setMessageListener(new ConsumerMessageListener("Consumer"));
             connection.start();
             Thread.sleep(300000);
             session.close();

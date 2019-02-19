@@ -15,11 +15,9 @@ import com.ohadr.activemq.websocket.ChatEndpoint;
  */
 public class ConsumerMessageListener implements MessageListener {
     private String consumerName;
-    private ChatEndpoint endpoint;
  
-    public ConsumerMessageListener(String consumerName, ChatEndpoint endpoint) {
+    public ConsumerMessageListener(String consumerName) {
         this.consumerName = consumerName;
-        this.endpoint = endpoint;
     }
  
     public void onMessage(Message message) {
@@ -27,7 +25,7 @@ public class ConsumerMessageListener implements MessageListener {
         try {
             System.out.println(consumerName + " received "
                     + textMessage.getText());
-            endpoint.onMessage( textMessage.getText() );
+            ChatEndpoint.onMessageFromQueue( textMessage.getText() );
         } catch (JMSException e) {
             e.printStackTrace();
         }

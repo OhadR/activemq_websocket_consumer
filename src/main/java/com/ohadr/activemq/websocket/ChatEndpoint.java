@@ -39,7 +39,7 @@ public class ChatEndpoint {
         chatEndpoints.add(this);
         users.put(session.getId(), queueName);
 
-        JmsMessageListenerExample.registerListener(this, queueName);
+        JmsMessageListenerExample.registerListener(queueName);
         broadcast("Listening to " + queueName);
     }
 
@@ -51,8 +51,7 @@ public class ChatEndpoint {
         broadcast(fullMessage);
     }
 
-    //TODO: learn if i can call directly to onMessage with session.
-    public void onMessage(String message)
+    public static void onMessageFromQueue(String message)
     {
 		log.info("onMessage: " + message);
         broadcast(message);
